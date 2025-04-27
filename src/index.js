@@ -2,11 +2,9 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
 import path from "path";
 
 import { connectDB } from "./lib/db.js";
-
 import authRoutes from "./routes/auth.route.js";
 import messageRoutes from "./routes/message.route.js";
 import { app, server } from "./lib/socket.js";
@@ -28,7 +26,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  console.log('Request cookies:', req.cookies);
+  console.log('Request cookies:', req.cookies); // Keep for development, remove in production
   next();
 });
 
@@ -43,7 +41,13 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: "Something went wrong!" });
+});
+
 server.listen(PORT, () => {
-  console.log("server is running on PORT:" + PORT);
+  console.log("Server is running on PORT:" + PORT);
   connectDB();
 });
