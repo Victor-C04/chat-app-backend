@@ -8,10 +8,10 @@ export const generateToken = (userId, res) => {
 
   // Set the token in an HTTP-only cookie
   res.cookie("jwt", token, {
-    maxAge: 7 * 24 * 60 * 60 * 1000, // Cookie expiration (7 days in milliseconds)
-    httpOnly: true, // Prevents access to the cookie from JavaScript (XSS protection)
-    sameSite: "strict", // CSRF protection: cookie is sent only in first-party contexts
-    secure: process.env.NODE_ENV !== "development", // Only set cookie over HTTPS in production
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: "none", // Change from "strict" to "none" to allow cross-origin
+    secure: true, // Must be true when sameSite is "none"
   });
 
   return token; // Optionally return the token
